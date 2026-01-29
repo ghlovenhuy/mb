@@ -1,0 +1,22 @@
+name: Build IPA
+on: [push]
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Xcode
+        run: sudo xcode-select -s /Applications/Xcode_14.2.app
+
+      - name: Run Build Script
+        run: |
+          chmod +x ipabuild.sh
+          ./ipabuild.sh
+        
+      - name: Upload Result
+        uses: actions/upload-artifact@v3
+        with:
+          name: App-IPA-Package
+          path: ./*.ipa
