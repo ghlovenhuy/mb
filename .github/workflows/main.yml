@@ -5,18 +5,21 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Setup Xcode
-        run: sudo xcode-select -s /Applications/Xcode_14.2.app
-
-      - name: Run Build Script
+      - name: Setup Build Script
         run: |
-          chmod +x ipabuild.sh
+          # Tìm và cấp quyền cho file script trong thư mục con
+          find . -name "ipabuild.sh" -exec chmod +x {} +
+          
+      - name: Run Build
+        run: |
+          # Di chuyển vào thư mục chứa dự án và chạy script
+          cd "MB-Bank-Fake-main"
           ./ipabuild.sh
         
       - name: Upload Result
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: App-IPA-Package
-          path: ./*.ipa
+          path: "**/*.ipa"
